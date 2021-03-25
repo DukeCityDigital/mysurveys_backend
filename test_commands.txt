@@ -1,0 +1,17 @@
+php artisan migrate --fresh --seed
+
+777 on storage [NOT FOR PRODUCTION]
+
+
+app exists
+can submit q form
+
+
+php artisan make:test loginAdmin --unit 
+
+php artisan test --group=0 --env=testing
+
+
+demo_user@sfjtechnologies.com
+
+demo_user
