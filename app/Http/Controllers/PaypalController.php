@@ -38,7 +38,7 @@ class PaypalController extends BaseController
 
         $requestEmailMatch = User::where("email", $requestEmail)->first();
         if ($requestEmailMatch && $requestEmailMatch->id !== $currentuser->id) {
-            return $this->sendError('Email validation error');
+            return $this->sendError('Email validation error - you are trying to claim a PayPal Email that is in use by another user as their primary login.');
         }
 
         $idExists = Participant::where("paypal_id", $request['email'])->first();
