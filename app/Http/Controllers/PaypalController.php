@@ -31,14 +31,18 @@ class PaypalController extends BaseController
         }
 
         $currentuser = Auth()->user();
+        if (!$currentuser) {
+            return $this->sendError('User not logged in.', 403);
+        }
         $currentuser->load('participant');
+
         $logged_in_email = $currentuser->email;
 
         $requestEmail = $request['email'];
 
         $requestEmailMatch = User::where("email", $requestEmail)->first();
         if ($requestEmailMatch && $requestEmailMatch->id !== $currentuser->id) {
-            return $this->sendError('Email validation error - you are trying to claim a PayPal Email that is in use by another user as their primary login.');
+            return $this->sendError('Email validation error - you are trying to claim a PayPal Email that is a primary login.');
         }
 
         $idExists = Participant::where("paypal_id", $request['email'])->first();
