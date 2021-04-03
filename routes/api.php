@@ -47,7 +47,7 @@ Route::group([
  * ONLY Administrator
  *
  */
-Route::group(['middleware' => ['role:administrator'],    'middleware' => 'api'], function () {
+Route::group(['middleware' => ['role:administrator']], function () {
     Route::post('invite_researcher', 'AdminController@invite_researcher');
     Route::resource('settings', 'SettingsController');
     Route::post('backup', 'SettingsController@backup');

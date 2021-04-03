@@ -46,7 +46,6 @@ class AdminController extends BaseController
      */
     public function invite_researcher(Request $request)
     {
-
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users',
             'nickname' => 'required|between:0,15',
@@ -63,7 +62,6 @@ class AdminController extends BaseController
             $rCtrl = new RegisterController();
             if ($newuser = $rCtrl->create_user($data, 'researcher')) {
                 $rCtrl->create_participant($newuser->id);
-                //send researcher invitation
                 $researcher = Researcher::create(
                     [
                         "nickname" => $data['nickname'],

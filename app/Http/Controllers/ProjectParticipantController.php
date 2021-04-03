@@ -96,15 +96,16 @@ class ProjectParticipantController extends BaseController
 
         if (isset($request->all()['all'])) {
             // $Project = Project::find($request['project_id']);
-            $pp = ProjectParticipant::with('participant')->where("projects_projectid", $request['project_id'])->get();
+            $pp = ProjectParticipant::with(['participant', 'user'])->where("projects_projectid", $request['project_id'])->get();
 
             $ra = [];
-            foreach ($pp as $ppayee) {
+            foreach ($pp as &$ppayee) {
+                $ppayee['paypal_id'] = $ppayee->user->email;
                 $p = [];
-                $p['paypal_id'] = $ppayee->participant->paypal_id;
+                $p['paypal_id'] = $ppayee->user->email;
                 $p['payment_amount'] = $ppayee->amount_to_pay;
                 $p['currency'] = 'USD';
-                $p['customer_id'] = $ppayee->safeid;
+                $p['customer_id'] = $ppayee->user->email;
                 $p['note'] = '';
                 $p['wallet'] = 'PAYPAL';
                 $ra[] = $p;
