@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Controllers\BaseController;
 use App\ProjectParticipant;
+use Carbon\Carbon;
+
 
 class PaymentValidationController extends BaseController
 {
@@ -24,8 +26,7 @@ class PaymentValidationController extends BaseController
             $pp->amount_to_pay = $s['amount_to_pay'];
             $pp->paymentorders_payorderid = $s['paymentorders_payorderid'];
             if (isset($s['payment_confirmed'])) {
-                $confirmed = date("Y-m-d H:i:s");
-                $pp->payment_confirmed = $confirmed;
+                $pp->payment_confirmed = date("Y-m-d H:i:s");
             }
             $dt = date("Y-m-d H:i:s");
             $pp->validated = $dt;
