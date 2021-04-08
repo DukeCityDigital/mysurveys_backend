@@ -22,7 +22,7 @@ class CreateProjectparticipantsTable extends Migration
             $table->datetime("finished")->nullable();
             $table->decimal('amount_to_pay', 10, 2)->default(0.00);
             $table->datetime("validated")->nullable();
-            $table->integer("paymentorders_payorderid")->nullable();
+            $table->string("paymentorders_payorderid")->nullable();
             $table->datetime("payment_confirmed")->nullable();
             $table->string("userparam1")->nullable();
             $table->string("userparam2")->nullable();
