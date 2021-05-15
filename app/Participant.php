@@ -69,10 +69,20 @@ class Participant extends Model
 
         $p = Participant::where('user_id', '=', $id)->first();
         $p->is_seed = 1;
-        $p->qualification_parents = $form['parents'] == true;
-        $p->qualification_friends = $form['friends'] == true;
-        $p->qualification_gm = $form['gm'];
+        // $p->qualification_parents = $form['parents'] == true;
+        // $p->qualification_friends = $form['friends'] == true;
+        // $p->qualification_gm = $form['gm'];
+
+
         $p->qualification_vac = $form['vac'];
+        $p->qualification_vac = $form['vac_benefit'];
+        $p->qualification_vac = $form['vac_harmful'];
+
+        $p->qualification_vac = $form['vac_pharma'];
+
+
+
+
         $p->qualification_us = $form['us'] == true;
         $p->share_data = isset($form['share_data']);
         $p->qualified = $form['qualified'] == true;
