@@ -34,6 +34,12 @@ class CreateParticipantsTable extends Migration
             $table->tinyInteger("qualification_gm")->nullable();
             $table->tinyInteger("qualification_vac")->nullable();
             $table->tinyInteger("qualification_us")->nullable();
+
+            
+
+
+
+
             $table->timestamps();
             $table->unique(['user_id'], 'user_id_unique')->references('id')->on('users')->onDelete('cascade');
         });

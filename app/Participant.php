@@ -19,8 +19,21 @@ class Participant extends Model
         'share_data',
         'qualified',
         'is_seed', 'first_name', 'family_name', 'birthyear', "qualification_us", "qualification_parents",
-        "qualification_friends", "qualification_gm", "qualification_vac",
-        'street', 'zip', 'city', 'seed_id', 'paypal_id', 'paypal_id_status', 'paypal_me'
+        "qualification_friends", "qualification_gm", 
+        'street', 'zip', 'city', 'seed_id', 'paypal_id', 'paypal_id_status', 'paypal_me',"qualification_vac",
+
+        "qualification_vac_receive",
+        "qualification_vac_benefit",
+        "qualification_vac_effective",
+        "qualification_vac_harmful",
+        "qualification_vac_pharma",
+
+
+
+        
+
+
+
     ];
     protected $appends = array('projects', 'verified_friends_count', 'eligible_seed', 'email', 'survey_complete');
     protected $primaryKey = 'user_id';
@@ -74,11 +87,13 @@ class Participant extends Model
         // $p->qualification_gm = $form['gm'];
 
 
-        $p->qualification_vac = $form['vac'];
-        $p->qualification_vac = $form['vac_benefit'];
-        $p->qualification_vac = $form['vac_harmful'];
+        $p->qualification_vac_receive = $form['vac_receive'];
+        $p->qualification_vac_benefit = $form['vac_benefit'];
+        $p->qualification_vac_effective = $form['vac_effective'];
 
-        $p->qualification_vac = $form['vac_pharma'];
+        $p->qualification_vac_harmful = $form['vac_harmful'];
+
+        $p->qualification_vac_pharma = $form['vac_pharma'];
 
 
 
