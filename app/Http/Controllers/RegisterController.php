@@ -169,7 +169,7 @@ class RegisterController extends BaseController
             // "qualification_parents" => $formData['parents'],
             // "qualification_gm" => $formData['gm'],
             // "qualification_vac" => $formData['vac'],
-            // "qualification_us" => $formData['us'],
+            "qualification_us" => $formData['us'],
             // "qualification_friends" => $formData['friends'],
             "share_data" => $share_data,
             "qualified" => $formData['qualified'],
