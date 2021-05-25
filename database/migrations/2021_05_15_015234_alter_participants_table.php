@@ -33,8 +33,7 @@ class AlterParticipantsTable extends Migration
     public function down()
     {
         Schema::table('participants', function (Blueprint $table) {
-            //
-            
+            //            
             $table->dropColumn('vac_benefit');
             $table->dropColumn('vac_effective');
             $table->dropColumn('vac_harmful');

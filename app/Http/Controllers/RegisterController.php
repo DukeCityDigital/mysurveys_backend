@@ -159,11 +159,18 @@ class RegisterController extends BaseController
         }
         $share_data = isset($formData['share_data']) ? $formData['share_data'] : null;
         $fda = array(
-            "qualification_parents" => $formData['parents'],
-            "qualification_gm" => $formData['gm'],
-            "qualification_vac" => $formData['vac'],
-            "qualification_us" => $formData['us'],
-            "qualification_friends" => $formData['friends'],
+            "qualification_vac_receive" => $formData['vac_receive'],
+            "qualification_vac_benefit" => $formData['vac_benefit'],
+            "qualification_vac_effective" => $formData['vac_effective'],
+            "qualification_vac_harmful" => $formData['vac_harmful'],
+            "qualification_vac_pharma" => $formData['vac_pharma'],
+            "qualification_vac_receive" => $formData['vac_receive'],
+
+            // "qualification_parents" => $formData['parents'],
+            // "qualification_gm" => $formData['gm'],
+            // "qualification_vac" => $formData['vac'],
+            // "qualification_us" => $formData['us'],
+            // "qualification_friends" => $formData['friends'],
             "share_data" => $share_data,
             "qualified" => $formData['qualified'],
 
