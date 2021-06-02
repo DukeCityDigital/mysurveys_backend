@@ -61,7 +61,7 @@ class EmailTemplateController extends BaseController
 
         $replacements = array();
         $replacements[] = array('*projecttitle*', stripslashes($project_data->project_title));
-        $replacements[] = array('*link*', $project_data->project_link);
+        $replacements[] = array('*link*', $project_data->link);
         $replacements[] = array('*responsibleperson*', stripslashes($project_data->responsible_person));
         $replacements[] = array('*projectinfo*', stripslashes($project_data->project_description));
         $replacements[] = array('*projectenddate*', $project_data->defaultend);
@@ -72,15 +72,17 @@ class EmailTemplateController extends BaseController
         } else {
             $replacements[] = array('*username*', '<no user selected>');
         }
-        $replacements[] = array('*contactaddress*',  $project_data->expected_payout);
+        $replacements[] = array('*contactaddress*', 'mysurveysteam@gmail.com');
         foreach ($replacements as $rep) {
             $subject = str_replace($rep[0], $rep[1], $subject);
             $body = str_replace($rep[0], $rep[1], $body);
         }
+        // var_dump($body);
         return array(
             "body" => $body,
             "subject" => $subject
         );
+      
     }
 
 
