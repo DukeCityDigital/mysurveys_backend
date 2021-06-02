@@ -8,6 +8,7 @@ use App\Http\Controllers\BaseController;
 use App\User;
 use Validator;
 use App\Http\Resources\Participants as ParticipantsResource;
+use App\ProjectParticipant;
 use Illuminate\Support\Facades\Auth;
 
 class ParticipantController extends BaseController
@@ -224,6 +225,8 @@ class ParticipantController extends BaseController
 
 
         $friends_ids = Participant::where("seed_id", $id)->pluck('user_id');
+
+        $participants_ids = ProjectParticipant::where("participants_userid", $id)->pluck('participants_userid');
         if (count($friends_ids)) {
             return $this->sendResponse($friends_ids, "This user has active friends, please delete those first " . "[$friends_ids]", 304);
         }
@@ -235,9 +238,12 @@ class ParticipantController extends BaseController
         if ($id == 1) {
             return $this->sendError("Don't delete the administrator");
         }
+        ProjectParticipant::where("participants_userid", $id)->delete();
+
+        Participant::where("user_id", $id)->delete();
         $d = User::find($id)->delete();
-        $p = Participant::where("user_id", $id)->delete();
-        if ($d && $p) {
+
+        if ($d) {
             return $this->sendResponse("Deleted user", 200);
         }
         return $this->sendError("Problem deleting user", 401);
