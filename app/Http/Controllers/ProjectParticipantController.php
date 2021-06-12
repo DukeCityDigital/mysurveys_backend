@@ -99,7 +99,36 @@ class ProjectParticipantController extends BaseController
             $pp = ProjectParticipant::with(['participant', 'user'])->where("projects_projectid", $request['project_id'])->get();
 
             $ra = [];
-            foreach ($pp as &$ppayee) {
+            $csv_new = ['participants_userid'];
+            
+
+            $data = [];
+            $ra = [];
+            foreach ($pp as $key => &$ppayee) {
+                $fields = array( 
+                    'paricipants_userid' => $ppayee->participants_userid,
+                    'email' => $ppayee->user->email,
+                    'project_id' =>$ppayee->projects_projectid,
+                    'invited' => $ppayee->invited,
+                    'started'=>$ppayee->started,
+                    'finished'=>$ppayee->amount_to_pay,
+                    'validated'=>$ppayee->validated,
+                    'paymentorders_payorderid'=>$ppayee->paymentorders_payorderid,
+                    'payment_confirmed' => $ppayee->payment_confirmed,
+                    'safeid' => $ppayee->safeid,
+                    'is_seed' =>$ppayee->participant->is_seed,
+                    'paypal_id'=>$ppayee->user->paypal_me,
+                    'paypal_id_status'=>$ppayee->user->paypal_id_status,
+                    'qualification_us' =>$ppayee->participant->qualification_us,
+                    'qualified' => $ppayee->participant->qualified,
+                    'qualification_vac_receive' => $ppayee->participant->qualification_vac_benefit,
+                    'qualification_vac_effective' => $ppayee->participant->qualification_vac_effective,
+                    'qualification_vac_pharma' => $ppayee->participant->qualification_vac_pharma,
+                    'amount_to_pay'=> $ppayee->amount_to_pay,
+                    'payment_confirmed'=> $ppayee->payment_confirmed,
+                    'subrole'=> $ppayee->user->subrole,            
+                );
+                $data[] = $fields;
                 $ppayee['paypal_id'] = $ppayee->user->email;
                 $p = [];
                 $p['paypal_id'] = $ppayee->user->email;
@@ -110,7 +139,7 @@ class ProjectParticipantController extends BaseController
                 $p['wallet'] = 'PAYPAL';
                 $ra[] = $p;
             }
-            return $this->sendResponse(["projectparticipants" => $pp, "csv" => $ra], 'PayPal Formatted Project Participants');
+            return $this->sendResponse(["projectparticipants" => $pp, "csv" => $ra, "v2csv"=>$data], 'PayPal Formatted Project Participants');
         }
 
         return new ProjectParticipants(ProjectParticipant::where("projects_projectid", $request['project_id'])->paginate(0));
