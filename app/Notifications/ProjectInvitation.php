@@ -78,8 +78,8 @@ class ProjectInvitation extends Notification implements ShouldQueue
         $reminder = $project['remind'] ? 'Reminder: ' : '';
 
         $mailMessage
-            ->from("support@mysurveys.santafe.edu", "MySurveys Support")
-            ->replyTo("support@mysurveys.santafe.edu", "MySurveys Support")
+            ->from("mysurveys@santafe.edu", "MySurveys Support")
+            ->replyTo("mysurveys@santafe.edu", "MySurveys Support")
             ->subject(Lang::get($reminder . 'Invitation to a ' . config('app.name') . ' Study'))
             ->greeting("Greetings " . $notifiable->participant['first_name'] . "!");
 
@@ -95,7 +95,7 @@ class ProjectInvitation extends Notification implements ShouldQueue
             ->line('Please click on the link below to start the project.')
             ->action('Start Project', $link)
             ->line('')
-            ->line(new HtmlString('<bold>For additional project support, contact support@mysurveys.santafe.edu</bold>'))
+            ->line(new HtmlString('<bold>For additional project support, contact mysurveys@santafe.edu</bold>'))
             ->line('')
             // ->action(Lang::get($this->projectInvitationUrl()), $this->projectInvitationUrl())
         ;
