@@ -11,6 +11,8 @@ use Illuminate\Support\Carbon;
 use Illuminate\Auth\Notifications\VerifyEmail as VerifyEmailBase;
 use Illuminate\Support\Facades\Lang;
 use Illuminate\Support\HtmlString;
+use App\ProjectParticipant;
+use App\Participant;
 
 class FriendVerifyApiEmail extends VerifyEmailBase
 {
@@ -25,7 +27,7 @@ class FriendVerifyApiEmail extends VerifyEmailBase
      */
     private function getMessage($notifiable, $extra = [])
     {
-
+        $sender_nickname = Participant::find($notifiable->id)->nickname;
         $role = $notifiable->getRoleNames()[0];
         $verificationUrl = $this->verificationUrl($notifiable);
         $subjectIntro = '[' . config('app.name') . ']';
@@ -42,7 +44,7 @@ class FriendVerifyApiEmail extends VerifyEmailBase
                 ->line('');
         }
         $mailMessage->line(Lang::get($salutation));
-        $mailMessage->line("Your friend is inviting you to join a study that investigates parents’ beliefs about different issues, including vaccination and GM food.");
+        $mailMessage->line("Your friend N " . $sender_nickname . " is inviting you to join a study that investigates parents’ beliefs about different issues, including vaccination and GM food.");
         $mailMessage->line('');
         $mailMessage->line('The study is completely confidential and you will be paid $10 for signing up and $5 for completing the study.');
 

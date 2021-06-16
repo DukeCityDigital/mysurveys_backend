@@ -87,6 +87,7 @@ Route::group(['middleware' => ['role:administrator|researcher']], function () {
 Route::group(['middleware' => ['role:participant', 'verified']], function () {
     Route::post('invite_friend', 'RegisterController@invite_participant');
     Route::post('start_project', 'MyProjectsController@start_project');
+    Route::resource('participants', 'ParticipantController');
 });
 //all roles
 Route::group(['middleware' => ['role:administrator|researcher|participant']], function () {

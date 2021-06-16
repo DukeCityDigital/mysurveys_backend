@@ -18,9 +18,10 @@ class Participant extends Model
         'user_id',
         'share_data',
         'qualified',
+        'nickname',
         'is_seed', 'first_name', 'family_name', 'birthyear', "qualification_us", "qualification_parents",
-        "qualification_friends", "qualification_gm", 
-        'street', 'zip', 'city', 'seed_id', 'paypal_id', 'paypal_id_status', 'paypal_me',"qualification_vac",
+        "qualification_friends", "qualification_gm",
+        'street', 'zip', 'city', 'seed_id', 'paypal_id', 'paypal_id_status', 'paypal_me', "qualification_vac",
 
         "qualification_vac_receive",
         "qualification_vac_benefit",
@@ -30,7 +31,7 @@ class Participant extends Model
 
 
 
-        
+
 
 
 

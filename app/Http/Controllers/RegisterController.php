@@ -114,9 +114,10 @@ class RegisterController extends BaseController
         }
         $data['password'] = Utilities::generateUUID(12);
         $newuser = $this->create_user($data, 'participant');
+        $nickname = isset($data['nickname']) ? $data['nickname'] : null;
         if ($newuser && Auth::user()) {
             $seed_id = Auth::user()->id;
-            $p = $this->create_participant($newuser->id, $seed_id);
+            $p = $this->create_participant($newuser->id, $seed_id, $nickname);
             if (isset($request['invite'])) {
                 $data['invite'] = true;
                 $newuser->friendSendApiEmailVerificationNotification($data);
@@ -299,7 +300,7 @@ class RegisterController extends BaseController
      * @param type $seed_id
      * @return boolean
      */
-    public function create_participant($id, $seed_id = null)
+    public function create_participant($id, $seed_id = null, $nickname = null)
     {
         $aData = [
             "user_id" => $id,
@@ -309,6 +310,7 @@ class RegisterController extends BaseController
         if ($new === false) {
             return response()->json(['error' => 'participant exists'], 409);
         }
+        $aData['nickname'] = $nickname;
         $data = Participant::create($aData);
         if ($data) {
             return $data;
