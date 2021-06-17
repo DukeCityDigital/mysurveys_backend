@@ -95,7 +95,7 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail, Shoul
     {
         if ($this->getRoleNames()[0] == 'participant') {
             $p = Participant::where("user_id", $this->id)->first();
-            if ($p->seed_id) {
+            if ($p && $p->seed_id) {
                 return 'friend';
             }
             return 'seed';
