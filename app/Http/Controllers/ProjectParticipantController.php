@@ -8,6 +8,7 @@ use App\Http\Controllers\BaseController;
 use Validator;
 use App\Project;
 use App\Http\Resources\ProjectParticipants;
+use App\Participant;
 
 class ProjectParticipantController extends BaseController
 {
@@ -100,34 +101,62 @@ class ProjectParticipantController extends BaseController
 
             $ra = [];
             $csv_new = ['participants_userid'];
-            
+
 
             $data = [];
             $ra = [];
             foreach ($pp as $key => &$ppayee) {
-                $fields = array( 
+
+                // echo 'seedid';
+                // echo $ppayee->participant->seed_id;
+
+                $seed = Participant::where("user_id", $ppayee->participant->seed_id)->first();
+
+                $friends = Participant::where("seed_id", $ppayee->participants_userid)->get();
+
+                $friend1 = isset($friends[0]) ? $friends[0]->nickname : null;
+                $friend2 = isset($friends[1]) ? $friends[1]->nickname : null;
+
+                // var_dump($friends);
+                // exit;
+
+                if ($seed) {
+                    $seed_nickname = $seed->nickname;
+                } else {
+                    $seed_nickname = null;
+                }
+                $fields = array(
+                    'created' => $ppayee->user->created_at,
+                    
                     'paricipants_userid' => $ppayee->participants_userid,
                     'email' => $ppayee->user->email,
-                    'project_id' =>$ppayee->projects_projectid,
+                    'project_id' => $ppayee->projects_projectid,
                     'invited' => $ppayee->invited,
-                    'started'=>$ppayee->started,
-                    'finished'=>$ppayee->amount_to_pay,
-                    'validated'=>$ppayee->validated,
-                    'paymentorders_payorderid'=>$ppayee->paymentorders_payorderid,
+                    'started' => $ppayee->started,
+                    'finished' => $ppayee->amount_to_pay,
+                    'validated' => $ppayee->validated,
+                    'paymentorders_payorderid' => $ppayee->paymentorders_payorderid,
                     'payment_confirmed' => $ppayee->payment_confirmed,
                     'safeid' => $ppayee->safeid,
-                    'is_seed' =>$ppayee->participant->is_seed,
-                    'paypal_id'=>$ppayee->user->paypal_me,
-                    'paypal_id_status'=>$ppayee->user->paypal_id_status,
-                    'qualification_us' =>$ppayee->participant->qualification_us,
+                    'is_seed' => $ppayee->participant->is_seed,
+                    'paypal_id' => $ppayee->participant->paypal_me,
+                    'paypal_id_status' => $ppayee->participant->paypal_id_status,
+                    'qualification_us' => $ppayee->participant->qualification_us,
                     'qualified' => $ppayee->participant->qualified,
                     'qualification_vac_receive' => $ppayee->participant->qualification_vac_benefit,
                     'qualification_vac_effective' => $ppayee->participant->qualification_vac_effective,
                     'qualification_vac_pharma' => $ppayee->participant->qualification_vac_pharma,
-                    'amount_to_pay'=> $ppayee->amount_to_pay,
-                    'payment_confirmed'=> $ppayee->payment_confirmed,
-                    'subrole'=> $ppayee->user->subrole,            
+                    'amount_to_pay' => $ppayee->amount_to_pay,
+                    'payment_confirmed' => $ppayee->payment_confirmed,
+                    'subrole' => $ppayee->user->subrole,
+                    'paricipants_userid' => $ppayee->participants_userid,
+                    'seed_id' => $ppayee->participant->seed_id,
+                    'nickname' => $ppayee->participant->nickname,
+                    'seed_nickname' => $seed_nickname,
+                    'friend1' => $friend1,
+                    'friend2' =>$friend2
                 );
+            
                 $data[] = $fields;
                 $ppayee['paypal_id'] = $ppayee->user->email;
                 $p = [];
@@ -139,7 +168,7 @@ class ProjectParticipantController extends BaseController
                 $p['wallet'] = 'PAYPAL';
                 $ra[] = $p;
             }
-            return $this->sendResponse(["projectparticipants" => $pp, "csv" => $ra, "v2csv"=>$data], 'PayPal Formatted Project Participants');
+            return $this->sendResponse(["projectparticipants" => $pp, "csv" => $ra, "v2csv" => $data], 'PayPal Formatted Project Participants');
         }
 
         return new ProjectParticipants(ProjectParticipant::where("projects_projectid", $request['project_id'])->paginate(0));
