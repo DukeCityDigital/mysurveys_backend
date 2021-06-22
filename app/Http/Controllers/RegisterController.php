@@ -158,7 +158,9 @@ class RegisterController extends BaseController
         foreach ($formData as $key => &$value) {
             $value = $value == 'true' ? 1 : $value;
         }
-        $share_data = isset($formData['share_data']) ? $formData['share_data'] : null;
+        $share_data = $formData['share_info'] ? 1: 0;
+        $share = $formData['share'] ? 1: 0;
+
         $fda = array(
             "qualification_vac_receive" => $formData['vac_receive'],
             "qualification_vac_benefit" => $formData['vac_benefit'],
@@ -172,6 +174,7 @@ class RegisterController extends BaseController
             // "qualification_vac" => $formData['vac'],
             "qualification_us" => $formData['us'],
             // "qualification_friends" => $formData['friends'],
+            "share" => $share,
             "share_data" => $share_data,
             "qualified" => $formData['qualified'],
 

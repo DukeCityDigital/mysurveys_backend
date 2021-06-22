@@ -17,11 +17,14 @@ class Participant extends Model
     protected $fillable = [
         'user_id',
         'share_data',
+        'share',
         'qualified',
         'nickname',
-        'is_seed', 'first_name', 'family_name', 'birthyear', "qualification_us", "qualification_parents",
+        'is_seed', 'first_name', 'family_name', 'birthyear', 
+        "qualification_us", "qualification_parents",
         "qualification_friends", "qualification_gm",
-        'street', 'zip', 'city', 'seed_id', 'paypal_id', 'paypal_id_status', 'paypal_me', "qualification_vac",
+        'street', 'zip', 'city', 'seed_id', 'paypal_id',
+         'paypal_id_status', 'paypal_me', "qualification_vac",
 
         "qualification_vac_receive",
         "qualification_vac_benefit",
@@ -86,21 +89,15 @@ class Participant extends Model
         // $p->qualification_parents = $form['parents'] == true;
         // $p->qualification_friends = $form['friends'] == true;
         // $p->qualification_gm = $form['gm'];
-
-
         $p->qualification_vac_receive = $form['vac_receive'];
         $p->qualification_vac_benefit = $form['vac_benefit'];
         $p->qualification_vac_effective = $form['vac_effective'];
-
         $p->qualification_vac_harmful = $form['vac_harmful'];
-
         $p->qualification_vac_pharma = $form['vac_pharma'];
-
-
-
-
         $p->qualification_us = $form['us'] == true;
-        $p->share_data = isset($form['share_data']);
+        $p->share_data = isset($form['share_info']);
+        $p->share = isset($form['share']);
+
         $p->qualified = $form['qualified'] == true;
 
 

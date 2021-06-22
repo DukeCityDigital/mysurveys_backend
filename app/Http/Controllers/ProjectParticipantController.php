@@ -126,8 +126,7 @@ class ProjectParticipantController extends BaseController
                     $seed_nickname = null;
                 }
                 $fields = array(
-                    'created' => $ppayee->user->created_at,
-                    
+                    'created' => $ppayee->user->created_at,                    
                     'paricipants_userid' => $ppayee->participants_userid,
                     'email' => $ppayee->user->email,
                     'project_id' => $ppayee->projects_projectid,
@@ -141,11 +140,18 @@ class ProjectParticipantController extends BaseController
                     'is_seed' => $ppayee->participant->is_seed,
                     'paypal_id' => $ppayee->participant->paypal_me,
                     'paypal_id_status' => $ppayee->participant->paypal_id_status,
-                    'qualification_us' => $ppayee->participant->qualification_us,
                     'qualified' => $ppayee->participant->qualified,
-                    'qualification_vac_receive' => $ppayee->participant->qualification_vac_benefit,
+
+                    'qualification_vac_receive' => $ppayee->participant->qualification_vac_receive,
+                    'qualification_vac_benefit' => $ppayee->participant->qualification_vac_benefit,
                     'qualification_vac_effective' => $ppayee->participant->qualification_vac_effective,
+                    'qualification_vac_harmful' => $ppayee->participant->qualification_vac_harmful,
                     'qualification_vac_pharma' => $ppayee->participant->qualification_vac_pharma,
+                    'qualification_share_data' => $ppayee->participant-share_data,
+
+
+                    'qualification_us' => $ppayee->participant->qualification_us,
+
                     'amount_to_pay' => $ppayee->amount_to_pay,
                     'payment_confirmed' => $ppayee->payment_confirmed,
                     'subrole' => $ppayee->user->subrole,
