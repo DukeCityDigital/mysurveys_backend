@@ -117,6 +117,7 @@ class ProjectParticipantController extends BaseController
                 $friend1 = isset($friends[0]) ? $friends[0]->nickname : null;
                 $friend2 = isset($friends[1]) ? $friends[1]->nickname : null;
 
+
                 // var_dump($friends);
                 // exit;
 
@@ -127,7 +128,6 @@ class ProjectParticipantController extends BaseController
                 }
                 $fields = array(
                     'created' => $ppayee->user->created_at,                    
-                    'paricipants_userid' => $ppayee->participants_userid,
                     'email' => $ppayee->user->email,
                     'project_id' => $ppayee->projects_projectid,
                     'invited' => $ppayee->invited,
@@ -147,7 +147,9 @@ class ProjectParticipantController extends BaseController
                     'qualification_vac_effective' => $ppayee->participant->qualification_vac_effective,
                     'qualification_vac_harmful' => $ppayee->participant->qualification_vac_harmful,
                     'qualification_vac_pharma' => $ppayee->participant->qualification_vac_pharma,
-                    'qualification_share_data' => $ppayee->participant-share_data,
+                    'qualification_share_answers' => $ppayee->participant->share,
+
+                    'qualification_share_info' => $ppayee->participant->share_data,
 
 
                     'qualification_us' => $ppayee->participant->qualification_us,

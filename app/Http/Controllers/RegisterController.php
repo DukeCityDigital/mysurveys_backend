@@ -344,7 +344,6 @@ class RegisterController extends BaseController
         $aData = [
             "email" => $user_info["email"],
             "username" => $user_info["email"],
-
             "password" => bcrypt($user_info["password"]),
             "verification_code" => sha1(time())
         ];
