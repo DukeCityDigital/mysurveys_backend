@@ -116,6 +116,10 @@ class ProjectParticipantController extends BaseController
 
                 $friend1 = isset($friends[0]) ? $friends[0]->nickname : null;
                 $friend2 = isset($friends[1]) ? $friends[1]->nickname : null;
+                $friend3 = isset($friends[2]) ? $friends[2]->nickname : null;
+                $friend4 = isset($friends[3]) ? $friends[3]->nickname : null;
+
+
 
 
                 // var_dump($friends);
@@ -162,7 +166,11 @@ class ProjectParticipantController extends BaseController
                     'nickname' => $ppayee->participant->nickname,
                     'seed_nickname' => $seed_nickname,
                     'friend1' => $friend1,
-                    'friend2' =>$friend2
+                    'friend2' =>$friend2,
+                    'friend3' =>$friend3,
+                    'friend4' =>$friend4,
+
+
                 );
             
                 $data[] = $fields;
