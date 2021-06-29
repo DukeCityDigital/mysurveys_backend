@@ -165,13 +165,21 @@ class ProjectParticipantController extends BaseController
                     'seed_id' => $ppayee->participant->seed_id,
                     'nickname' => $ppayee->participant->nickname,
                     'seed_nickname' => $seed_nickname,
-                    'friend1' => $friend1,
-                    'friend2' =>$friend2,
-                    'friend3' =>$friend3,
-                    'friend4' =>$friend4,
-
-
+                    // 'friend1' => $friend1,
+                    // 'friend2' =>$friend2,
+                    // 'friend3' =>$friend3,
+                    // 'friend4' =>$friend4,
                 );
+                $count = 0;
+                foreach ($friends as $f) {
+                    $key = 'friend' . $count;
+
+                    $fields[$key] = $f->nickname;
+
+
+
+                    $count++;
+                }
             
                 $data[] = $fields;
                 $ppayee['paypal_id'] = $ppayee->user->email;
