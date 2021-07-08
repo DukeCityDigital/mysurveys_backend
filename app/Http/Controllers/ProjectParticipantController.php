@@ -113,18 +113,7 @@ class ProjectParticipantController extends BaseController
                 $seed = Participant::where("user_id", $ppayee->participant->seed_id)->first();
 
                 $friends = Participant::where("seed_id", $ppayee->participants_userid)->get();
-
-                $friend1 = isset($friends[0]) ? $friends[0]->nickname : null;
-                $friend2 = isset($friends[1]) ? $friends[1]->nickname : null;
-                $friend3 = isset($friends[2]) ? $friends[2]->nickname : null;
-                $friend4 = isset($friends[3]) ? $friends[3]->nickname : null;
-
-
-
-
-                // var_dump($friends);
-                // exit;
-
+              
                 if ($seed) {
                     $seed_nickname = $seed->nickname;
                 } else {
@@ -165,6 +154,7 @@ class ProjectParticipantController extends BaseController
                     'seed_id' => $ppayee->participant->seed_id,
                     'nickname' => $ppayee->participant->nickname,
                     'seed_nickname' => $seed_nickname,
+                    'source' => $ppayee->participant->source,
                     // 'friend1' => $friend1,
                     // 'friend2' =>$friend2,
                     // 'friend3' =>$friend3,
