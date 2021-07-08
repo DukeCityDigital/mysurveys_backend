@@ -20,12 +20,12 @@ class Participant extends Model
         'share',
         'qualified',
         'nickname',
-        'is_seed', 'first_name', 'family_name', 'birthyear', 
+        'is_seed', 'first_name', 'family_name', 'birthyear',
         "qualification_us", "qualification_parents",
         "qualification_friends", "qualification_gm",
         'street', 'zip', 'city', 'seed_id', 'paypal_id',
-         'paypal_id_status', 'paypal_me', "qualification_vac",
-
+        'paypal_id_status', 'paypal_me', "qualification_vac",
+        "source",
         "qualification_vac_receive",
         "qualification_vac_benefit",
         "qualification_vac_effective",
@@ -84,6 +84,8 @@ class Participant extends Model
     public static function makeSeed($id, $form)
     {
 
+        $source = isset($form['source']) ? $form['source'] : null;
+
         $p = Participant::where('user_id', '=', $id)->first();
         $p->is_seed = 1;
         // $p->qualification_parents = $form['parents'] == true;
@@ -100,6 +102,7 @@ class Participant extends Model
 
         $p->qualified = $form['qualified'] == true;
 
+        $p->source = $source;
 
         $p->save();
         return $p;
