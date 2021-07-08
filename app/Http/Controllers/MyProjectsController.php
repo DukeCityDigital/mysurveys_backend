@@ -141,7 +141,7 @@ class MyProjectsController extends BaseController
     {
         $safe_id = $pp->safeid;
         $linkparams = [];
-        $linkparams['code'] = $safe_id;
+        $linkparams['code'] = $pp->participants_userid;
         $linkparams['b'] = "";
         $link = $p['link'] . '?' . http_build_query($linkparams);
         return $link;
