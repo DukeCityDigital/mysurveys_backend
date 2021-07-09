@@ -30,7 +30,7 @@ class MyProjectsController extends BaseController
         }
         $code = $validator->valid()['code'];
 
-        $pp = ProjectParticipant::where("safeid", $code)->first();
+        $pp = ProjectParticipant::where("participants_userid", $code)->first();
         if (!$pp) {
             return $this->sendResponse(False, 'code not found');
         }
