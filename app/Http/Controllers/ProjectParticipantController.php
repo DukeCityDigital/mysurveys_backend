@@ -244,7 +244,7 @@ class ProjectParticipantController extends BaseController
         $user_actual = User::find($user);
         $string = $user_actual->email . $project_id;
         $hashed = Hash::make($string);
-        return $hashed;
+        return substr($hashed, -12);
         // $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
         // $randomString = '';
 
