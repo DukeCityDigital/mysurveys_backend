@@ -9,6 +9,8 @@ use Validator;
 use App\Project;
 use App\Http\Resources\ProjectParticipants;
 use App\Participant;
+use App\User;
+use Illuminate\Support\Facades\Hash;
 
 class ProjectParticipantController extends BaseController
 {
@@ -220,7 +222,7 @@ class ProjectParticipantController extends BaseController
             $data = [
                 "projects_projectid" => $request['project_id'],
                 "participants_userid" => $user,
-                "safeid" => $this->getName(12)
+                "safeid" => $this->getName($user, $request['project_id'])
             ];
 
             $p = new ProjectParticipant();
@@ -237,17 +239,21 @@ class ProjectParticipantController extends BaseController
         return $this->sendResponse('Added ' . $new . ' Participants; ', 201);
     }
 
-    private function getName($n)
+    private function getName($user, $project_id)
     {
-        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        $randomString = '';
+        $user_actual = User::find($user);
+        $string = $user_actual->email . $project_id;
+        $hashed = Hash::make($string);
+        return $hashed;
+        // $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+        // $randomString = '';
 
-        for ($i = 0; $i < $n; $i++) {
-            $index = rand(0, strlen($characters) - 1);
-            $randomString .= $characters[$index];
-        }
+        // for ($i = 0; $i < $n; $i++) {
+        //     $index = rand(0, strlen($characters) - 1);
+        //     $randomString .= $characters[$index];
+        // }
 
-        return $randomString;
+        // return $randomString;
     }
 
     private function validateFilter($request)
