@@ -243,17 +243,8 @@ class ProjectParticipantController extends BaseController
     {
         $user_actual = User::find($user);
         $string = $user_actual->email . $project_id;
-        $hashed = Hash::make($string);
-        return substr($hashed, -12);
-        // $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        // $randomString = '';
-
-        // for ($i = 0; $i < $n; $i++) {
-        //     $index = rand(0, strlen($characters) - 1);
-        //     $randomString .= $characters[$index];
-        // }
-
-        // return $randomString;
+        $hashed = md5($string);
+        return substr($hashed, -12);       
     }
 
     private function validateFilter($request)
