@@ -58,6 +58,7 @@ class CustomMessage extends Notification
         $replacements[0] = "";
         $body =  preg_replace($patterns, $replacements, $body);
         var_dump($body);
+        exit;
         return $body;
     }
 

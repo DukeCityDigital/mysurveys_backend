@@ -7,8 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\BaseController;
 use App\Project;
 use Validator;
-
-
+use App\Http\Controllers\MyProjectsController;
+use App\ProjectParticipant;
 
 class EmailTemplateController extends BaseController
 {
@@ -59,9 +59,24 @@ class EmailTemplateController extends BaseController
             return False;
         }
 
+        $pCtrl = new MyProjectsController();
+
+        if ($user) {
+            $pp = ProjectParticipant::where("participants_userid", $user->id)->first();
+            $proj = Project::find($project_id);
+            if (!$pp) {
+                $pp = ProjectParticipant::where("projects_projectid", $project_id)->first();
+            }
+            $userlink = $pCtrl->makeProjectLink($pp, $proj);
+        } else {
+            $userlink = $project_data->link;
+        }
+
+        // var_dump($userlink);
+
         $replacements = array();
         $replacements[] = array('*projecttitle*', stripslashes($project_data->project_title));
-        $replacements[] = array('*link*', $project_data->link);
+        $replacements[] = array('*link*', $userlink);
         $replacements[] = array('*responsibleperson*', stripslashes($project_data->responsible_person));
         $replacements[] = array('*projectinfo*', stripslashes($project_data->project_description));
         $replacements[] = array('*projectenddate*', $project_data->defaultend);
@@ -82,7 +97,6 @@ class EmailTemplateController extends BaseController
             "body" => $body,
             "subject" => $subject
         );
-      
     }
 
 
