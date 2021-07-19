@@ -18,6 +18,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Notifications\PasswordResetSuccess;
 use App\Participant;
 use App\Helpers\Utilities;
+use Request as BRequest;
 
 class RegisterController extends BaseController
 {
@@ -49,7 +50,9 @@ class RegisterController extends BaseController
             return response()->json($validator->messages()->toArray(), 409);
         }
         $user_info = $validator->valid();
-
+        // $ip = BRequest::ip();
+        // var_dump($ip);
+        // exit;
         if ($newuser = $this->create_user($user_info, 'participant')) {
             $this->create_participant($newuser->id);
             if (isset($user_info['qualificationForm'])) {
@@ -158,8 +161,8 @@ class RegisterController extends BaseController
         foreach ($formData as $key => &$value) {
             $value = $value == 'true' ? 1 : $value;
         }
-        $share_data = $formData['share_info'] ? 1: 0;
-        $share = $formData['share'] ? 1: 0;
+        $share_data = $formData['share_info'] ? 1 : 0;
+        $share = $formData['share'] ? 1 : 0;
 
         $fda = array(
             "qualification_vac_receive" => $formData['vac_receive'],
