@@ -53,8 +53,8 @@ class EmailTemplateMessage extends Notification
     {
         $data = $this->data;
 
-        $body = $this->emailCtrl->transformEmailTemplateBody($data, $data['project']->id, $notifiable);
-
+        $body1 = $this->emailCtrl->transformEmailTemplateBody($data, $data['project']->id, $notifiable);
+        $body = str_replace("*buttonlink*", "", $body1);
 
         $mailMessage = new MailMessage();
         $mailMessage->subject(Lang::get($body['subject']));
@@ -67,6 +67,12 @@ class EmailTemplateMessage extends Notification
         if (isset($this->data['link']) && $this->data['link'] !== '') {
             $mailMessage->action(Lang::get($this->data['link']), $this->data['link']);
         }
+
+        if (strpos($body1['body'], "*buttonlink*")) {
+            $mailMessage->action(Lang::get('Start Project'), $body['link']);
+        }
+
+
 
         return $mailMessage;
     }

@@ -113,7 +113,8 @@ class EmailTemplateController extends BaseController
         // var_dump($body);
         return array(
             "body" => $body,
-            "subject" => $subject
+            "subject" => $subject,
+            "link" => $userlink
         );
     }
 
