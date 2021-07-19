@@ -8,6 +8,7 @@ use App\Http\Controllers\BaseController;
 use App\Project;
 use Validator;
 use App\Http\Controllers\MyProjectsController;
+use App\Participant;
 use App\ProjectParticipant;
 
 class EmailTemplateController extends BaseController
@@ -46,6 +47,8 @@ class EmailTemplateController extends BaseController
         return $this->sendResponse($templates->toArray(), 'Email Templates Retrieved successfully.');
     }
 
+
+
     /**
      * Change the wildcards to their new values
      */
@@ -61,12 +64,24 @@ class EmailTemplateController extends BaseController
 
         $pCtrl = new MyProjectsController();
 
+        $seed_nick = "init";
+        $user_nick = "init";
+
+
         if ($user) {
             $pp = ProjectParticipant::where("participants_userid", $user->id)->first();
+            $p = Participant::where("user_id", $user->id)->first();
+            $user_nick = $user->nickname;
+            if ($p->seed_id) {
+                $seed = Participant::where("user_id", $p->seed_id)->first();
+                $seed_nick = $seed->nickname;
+            }
+
             $proj = Project::find($project_id);
             if (!$pp) {
                 $pp = ProjectParticipant::where("projects_projectid", $project_id)->first();
             }
+
             $userlink = $pCtrl->makeProjectLink($pp, $proj);
         } else {
             $userlink = $project_data->link;
@@ -84,8 +99,11 @@ class EmailTemplateController extends BaseController
         $replacements[] = array('*expectedpayout*',  $project_data->expected_payout);
         if ($user) {
             $replacements[] = array('*username*', $user->email);
+            $replacements[] = array('*nickname*', $user_nick);
+            $replacements[] = array('*seednickname*', $seed_nick);
         } else {
             $replacements[] = array('*username*', '<no user selected>');
+            $replacements[] = array('*nickname*', '<no user selected>');
         }
         $replacements[] = array('*contactaddress*', 'mysurveysteam@gmail.com');
         foreach ($replacements as $rep) {
