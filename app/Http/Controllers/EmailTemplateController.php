@@ -64,15 +64,15 @@ class EmailTemplateController extends BaseController
 
         $pCtrl = new MyProjectsController();
 
-        $seed_nick = "init";
-        $user_nick = "init";
+        $seed_nick = "";
+        $user_nick = "";
 
 
         if ($user) {
             $pp = ProjectParticipant::where("participants_userid", $user->id)->first();
             $p = Participant::where("user_id", $user->id)->first();
             $user_nick = $user->nickname;
-            if ($p->seed_id) {
+            if ($p && $p->seed_id) {
                 $seed = Participant::where("user_id", $p->seed_id)->first();
                 $seed_nick = $seed->nickname;
             }
