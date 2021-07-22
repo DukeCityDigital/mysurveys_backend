@@ -19,8 +19,12 @@ class PaymentValidationController extends BaseController
     {
 
         $submit = $request->all();
+
+        // var_dump($submit);
+        // exit;
         foreach ($submit as $s) {
-            $pp = ProjectParticipant::where("projects_projectid", $s['projects_projectid'])
+            // var_dump($s);
+            $pp = ProjectParticipant::where("projects_projectid", $s['project_id'])
                 ->where("participants_userid", $s['participants_userid'])
                 ->first();
             $pp->amount_to_pay = $s['amount_to_pay'];

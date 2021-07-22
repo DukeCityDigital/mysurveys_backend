@@ -152,7 +152,7 @@ class ProjectParticipantController extends BaseController
                     'amount_to_pay' => $ppayee->amount_to_pay,
                     'payment_confirmed' => $ppayee->payment_confirmed,
                     'subrole' => $ppayee->user->subrole,
-                    'paricipants_userid' => $ppayee->participants_userid,
+                    'participants_userid' => $ppayee->participants_userid,
                     'seed_id' => $ppayee->participant->seed_id,
                     'nickname' => $ppayee->participant->nickname,
                     'seed_nickname' => $seed_nickname,
