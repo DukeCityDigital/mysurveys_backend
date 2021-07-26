@@ -51,7 +51,7 @@ class FriendVerifyApiEmail extends VerifyEmailBase
         // $mailMessage->line(Lang::get($salutation));
         $mailMessage->line("Your friend " . $sender_nickname . " is inviting you to join a study that investigates people’s beliefs about different issues, including vaccination.");
         $mailMessage->line('');
-        $mailMessage->line('The study is completely confidential and you will be paid $10 for signing up and $5 for completing the study.');
+        $mailMessage->line('The study is completely confidential and you will be paid $1 for signing up and $10 for completing the study.');
 
 
 
@@ -65,7 +65,7 @@ class FriendVerifyApiEmail extends VerifyEmailBase
             ->line('Please click the button below to verify your email address.')
             ->action(Lang::get(' Please Verify Email Address'), $verificationUrl)
             ->line('')
-            ->line(new HtmlString('<bold>For additional project support, contact mysurveys@santafe.edu</bold>'));
+            ->line(new HtmlString('<bold>For additional project support, contact mysurveysteam@gmail.com</bold>'));
 
 
 
