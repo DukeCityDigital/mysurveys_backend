@@ -83,9 +83,10 @@ class EmailTemplateController extends BaseController
             }
 
             $userlink = $pCtrl->makeProjectLink($pp, $proj);
-        } else {
-            $userlink = $project_data->link;
         }
+        //  else {
+        //     $userlink = $project_data->link;
+        // }
 
         // var_dump($userlink);
 
