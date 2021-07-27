@@ -70,7 +70,7 @@ class EmailTemplateMessage extends Notification
 
         $pCtrl = new MyProjectsController();
         $proj = Project::find($data['project']->id);
-        $pp = ProjectParticipant::where("participants_userid", $notifiable->id)->first();
+        $pp = ProjectParticipant::where("participants_userid", $notifiable->id)->where("projects_projectid", $data['project']->id)->first();
 
 
         $userlink = $pCtrl->makeProjectLink($pp, $proj);
