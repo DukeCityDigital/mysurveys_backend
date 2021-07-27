@@ -3,6 +3,9 @@
 namespace App\Notifications;
 
 use App\Http\Controllers\EmailTemplateController;
+use App\Http\Controllers\MyProjectsController;
+use App\Project;
+use App\ProjectParticipant;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
@@ -64,12 +67,21 @@ class EmailTemplateMessage extends Notification
         foreach ($lines as $line) {
             $mailMessage->line($line);
         }
+
+        $pCtrl = new MyProjectsController();
+        $proj = Project::find($data['project']->id);
+        $pp = ProjectParticipant::where("participants_userid", $notifiable->id)->first();
+
+
+        $userlink = $pCtrl->makeProjectLink($pp, $proj);
+
+
         if (isset($this->data['link']) && $this->data['link'] !== '') {
-            $mailMessage->action(Lang::get($this->data['link']), $this->data['link']);
+            $mailMessage->action($userlink, $userlink);
         }
 
         if (strpos($body1['body'], "*buttonlink*")) {
-            $mailMessage->action(Lang::get('Start Project'), $body['link']);
+            $mailMessage->action(Lang::get('Start Project'), $userlink);
         }
 
 
