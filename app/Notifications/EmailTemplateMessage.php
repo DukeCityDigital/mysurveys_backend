@@ -71,15 +71,13 @@ class EmailTemplateMessage extends Notification
         $pCtrl = new MyProjectsController();
         $proj = Project::find($data['project']->id);
         $pp = ProjectParticipant::where("participants_userid", $notifiable->id)->where("projects_projectid", $proj->id)->first();
-        var_dump($pp);
-        var_dump($proj);
 
         $userlink = $pCtrl->makeProjectLink($pp, $proj);
 
 
-        if (isset($this->data['link']) && $this->data['link'] !== '') {
-            $mailMessage->action($userlink, $userlink);
-        }
+        // if (isset($this->data['link']) && $this->data['link'] !== '') {
+        //     $mailMessage->action($userlink, $userlink);
+        // }
 
         if (strpos($body1['body'], "*buttonlink*")) {
             $mailMessage->action(Lang::get('Start Project'), $userlink);

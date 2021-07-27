@@ -93,7 +93,7 @@ class EmailTemplateController extends BaseController
 
         $replacements = array();
         $replacements[] = array('*projecttitle*', stripslashes($project_data->project_title));
-        $replacements[] = array('*link*', $userlink);
+        // $replacements[] = array('*link*', $userlink);
         $replacements[] = array('*responsibleperson*', stripslashes($project_data->responsible_person));
         $replacements[] = array('*projectinfo*', stripslashes($project_data->project_description));
         $replacements[] = array('*projectenddate*', $project_data->defaultend);

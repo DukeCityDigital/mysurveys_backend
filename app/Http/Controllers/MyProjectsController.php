@@ -139,7 +139,7 @@ class MyProjectsController extends BaseController
      */
     public function makeProjectLink($pp, $p)
     {
-        $safe_id = $pp->safeid;
+
         $linkparams = [];
         $linkparams['code'] = $pp->safeid;
         $linkparams['b'] = "";
