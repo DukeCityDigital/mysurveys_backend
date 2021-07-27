@@ -66,6 +66,7 @@ class EmailTemplateController extends BaseController
 
         $seed_nick = "";
         $user_nick = "";
+        $userlink = "";
 
 
         if ($user) {
