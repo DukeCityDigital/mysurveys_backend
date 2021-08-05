@@ -61,9 +61,19 @@ class ProjectInvitationController extends BaseController
         }
 
         $users_actual = User::with('participant')->whereIn("id", $ids)->get();
+        $d = new \DateTime();
+        $now = $d->format("Y-m-d H:i:s");
 
         foreach ($users_actual as $message_target) {
             //            TODO factor into env
+            if (strpos(strtolower($template->subject), "invit") !== false) {
+                // var_dump($template, $message_target->id);
+                $participant = ProjectParticipant::where("participants_userid", $message_target->id)->first();
+                $participant->invited = $now;
+                $participant->save();
+            }
+            
+
             sleep(1);
             $message_target->sendEmailTemplateMessage($data);
             $this->logger('info', "Custom message sent to participant", ["user" => $message_target]);
