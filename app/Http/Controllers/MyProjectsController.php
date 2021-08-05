@@ -65,7 +65,9 @@ class MyProjectsController extends BaseController
         $user = $request->user();
         $pp = ProjectParticipant::with(['project' => function ($query) {
             $query->where("state", "Started")->where("start_state", "Open");
-        }], 'user')->where("participants_userid", $user_id)->get();
+        }], 'user')
+        ->whereNotNull('invited')
+        ->where("participants_userid", $user_id)->get();
 
         $rA = [];
 
