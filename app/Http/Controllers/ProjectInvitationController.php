@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\EmailTemplate;
 use App\Http\Controllers\BaseController;
+use App\Notifications\EmailTemplateMessage;
 use Illuminate\Http\Request;
 use App\Participant;
 use App\ProjectParticipant;
@@ -86,10 +87,7 @@ class ProjectInvitationController extends BaseController
      */
     public function send_project_invitations(Request $request)
     {
-
-        //default as DEV for no actual sending
-
-
+  
         $validator = Validator::make($request->all(), [
             'ids' => 'required',
             'project_id' => 'required',
@@ -98,8 +96,10 @@ class ProjectInvitationController extends BaseController
         if ($validator->fails()) {
             return $this->sendError('Missing required ids/dev');
         }
-        $project_id = $request['project_id'];
         $ids = $request['ids'];
+
+        $project_id = $request['project_id'];
+
 
         if ($validator->valid()['TEST_MODE'] == 'PRODUCTION') {
             $DEV = 'PRODUCTION';
@@ -138,13 +138,26 @@ class ProjectInvitationController extends BaseController
 
         foreach ($pp_actual as $invitee_participant) {
             sleep(1);
-            DB::transaction(function () use ($data, $invitee_participant, $now,  $project_id, &$count) {
+            DB::transaction(function () use ($project_actual, $data, $invitee_participant, $now,  $project_id, &$count) {
                 $data['participant'] = $invitee_participant;
                 $invitee_participant->invited = $now;
                 $invitee_participant->save();
 
                 $user_actual = User::find($invitee_participant->participants_userid);
-                $user_actual->sendInvitationNotification($data);
+
+
+                // OP HERE 
+                $data['project'] = $project_actual;
+
+
+                $template = EmailTemplate::find(1);
+                $data['body'] = $template['body'];
+                $data['subject'] = $template['subject'];
+
+
+                $user_actual->sendEmailTemplateMessage($data);
+
+                // $user_actual->sendInvitationNotification($data);
                 $count = $count + 1;
                 $this->logger('info', "Invitation sent to participant " . $user_actual->email, ["user" => $user_actual, "project_id" => $project_id]);
 

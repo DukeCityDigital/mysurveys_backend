@@ -161,10 +161,11 @@ class User extends Authenticatable implements JWTSubject, MustVerifyEmail, Shoul
      * Send custom message
      * @param
      */
-    public function sendCustomMessage($data = [])
-    {
-        $this->notify(new CustomMessage($data));
-    }
+    // TODO clean 
+    // public function sendCustomMessage($data = [])
+    // {
+    //     $this->notify(new CustomMessage($data));
+    // }
 
     /**
      * Project invitation email
