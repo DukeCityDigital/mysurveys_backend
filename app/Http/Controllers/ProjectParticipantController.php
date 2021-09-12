@@ -101,7 +101,6 @@ class ProjectParticipantController extends BaseController
             $ra = [];
             $csv_new = ['participants_userid'];
 
-
             $data = [];
             $ra = [];
             foreach ($pp as $key => &$ppayee) {
@@ -133,19 +132,14 @@ class ProjectParticipantController extends BaseController
                     'paypal_id' => $ppayee->participant->paypal_me,
                     'paypal_id_status' => $ppayee->participant->paypal_id_status,
                     'qualified' => $ppayee->participant->qualified,
-
                     'qualification_vac_receive' => $ppayee->participant->qualification_vac_receive,
                     'qualification_vac_benefit' => $ppayee->participant->qualification_vac_benefit,
                     'qualification_vac_effective' => $ppayee->participant->qualification_vac_effective,
                     'qualification_vac_harmful' => $ppayee->participant->qualification_vac_harmful,
                     'qualification_vac_pharma' => $ppayee->participant->qualification_vac_pharma,
                     'qualification_share_answers' => $ppayee->participant->share,
-
                     'qualification_share_info' => $ppayee->participant->share_data,
-
-
                     'qualification_us' => $ppayee->participant->qualification_us,
-
                     'amount_to_pay' => $ppayee->amount_to_pay,
                     'payment_confirmed' => $ppayee->payment_confirmed,
                     'subrole' => $ppayee->user->subrole,
@@ -160,15 +154,18 @@ class ProjectParticipantController extends BaseController
                     // 'friend4' =>$friend4,
                 );
                 $count = 0;
+                $pp_verified_friends = 0;
                 foreach ($friends as $f) {
                     $key = 'friend' . $count;
-
                     $fields[$key] = $f->nickname;
-
-
-
+                    $keypp = $key . " " . " PayPalIdStatus";
+                    $fields[$keypp] = $f->paypal_id_status;
+                    if ($f->paypal_id_status =='Ok') {
+                        $pp_verified_friends ++;
+                    }
                     $count++;
                 }
+                $fields['verified_friends_count']=$pp_verified_friends;
 
                 $data[] = $fields;
                 $ppayee['paypal_id'] = $ppayee->user->email;
