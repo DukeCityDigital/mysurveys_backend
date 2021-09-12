@@ -44,7 +44,7 @@ class ProjectParticipantController extends BaseController
                 $field_actual = trim($condition, "!");
                 $conditions[] = ["field" => $field_actual, "operator" => $operator];
             }
-            $init = ProjectParticipant::where("projects_projectid", $request['project_id'])->orderBy($request['sort'], $request['order']);
+            $init = ProjectParticipant::with('user')->where("projects_projectid", $request['project_id'])->orderBy($request['sort'], $request['order']);
 
             foreach ($conditions as $c) {
                 if ($c['operator']) {
@@ -60,7 +60,36 @@ class ProjectParticipantController extends BaseController
             $with_ids = $this->add_selected_ids($resource, $selected_ids);
             return $with_ids;
         }
-        $r = ProjectParticipant::where("projects_projectid", $request['project_id'])->orderBy($request['sort'], $request['order'])->paginate();
+        $r = ProjectParticipant::with(['user', 'participant'])->where("projects_projectid", $request['project_id'])->orderBy($request['sort'], $request['order'])->paginate();
+
+
+        // "id",
+        // "created_at",
+        // "currentProject",
+        // "is_seed",
+        // "friends",
+        // "paypal_id_status",
+        // 'source',
+        // "peers",    
+        // "vac_benefit",
+        // "vac_effective",
+        // "vac_harmful",
+        // "vac_pharma",     
+        // "add",
+
+        foreach ($r as &$resp) {
+            $resp->id = $resp->user->id;
+            $resp->is_seed = $resp->user->is_seed;
+            $resp->friends = $resp->user->friends;
+            $resp->source = $resp->participant->source;
+            $resp->paypal_id_status = $resp->participant->paypal_id_status;
+            $resp->vac_benefit = $resp->participant->qualification_vac_benefit;
+            $resp->vac_receive = $resp->participant->qualification_vac_receive;
+            $resp->vac_effective = $resp->participant->qualification_vac_effective;
+            $resp->vac_harmful = $resp->participant->qualification_vac_harmful;
+            $resp->vac_pharma = $resp->participant->qualification_vac_pharma;
+            $resp->source = $resp->user->source;
+        }
         $with_ids = $this->add_selected_ids($r, $r->pluck('participants_userid'));
 
         return $with_ids;

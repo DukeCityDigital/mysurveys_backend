@@ -61,6 +61,8 @@ class ProjectInvitationController extends BaseController
             return $this->sendResponse('Test email sent to ' . $user->email, $user->email);
         }
 
+        
+
         $users_actual = User::with('participant')->whereIn("id", $ids)->get();
         $d = new \DateTime();
         $now = $d->format("Y-m-d H:i:s");
