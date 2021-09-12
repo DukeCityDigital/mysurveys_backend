@@ -75,6 +75,8 @@ Route::group(['middleware' => ['role:administrator|researcher']], function () {
     Route::post('create_selection', 'ProjectParticipantController@create_selection');
     Route::post('get_selection', 'ProjectParticipantController@get_selection');
     Route::post('get_advanced_selection', 'ParticipantController@get_advanced_selection');
+    Route::post('remove_from_selection', 'ProjectParticipantController@remove_from_selection');
+
     Route::resource('participants', 'ParticipantController');
     Route::resource('projects', 'ProjectController');
 });
@@ -86,6 +88,8 @@ Route::group(['middleware' => ['role:administrator|researcher']], function () {
  */
 Route::group(['middleware' => ['role:participant', 'verified']], function () {
     Route::post('invite_friend', 'RegisterController@invite_participant');
+    Route::post('remind_friend', 'RegisterController@remind_friend');
+
     Route::post('start_project', 'MyProjectsController@start_project');
     Route::resource('participants', 'ParticipantController');
 });

@@ -43,7 +43,7 @@ class ParticipantController extends BaseController
 
         $select_paypal_status_ok = $request['paypal_status_ok'] == true;
         $paypal_status = $request['paypal_status'] !== '' && $request['paypal_status'] !== 'Any' ? $request['paypal_status'] : null;
-        
+
         $survey_complete = $request['survey_complete'] == true;
 
         $eligible_seed = $request['eligible_seed'] == true;
@@ -52,8 +52,10 @@ class ParticipantController extends BaseController
         $include_seeds = $request['include_seeds'] == 'true';
         $include_peers = $request['include_peers'] == 'true';
 
+        $project_id = $request['project_id'];
 
-        $participants = Participant::with(['friends', 'user'])->whereHas('user', function ($query) use ($forms, $select_paypal_status_ok,$paypal_status, $eligible_seed, $eligible_peers, $survey_complete) {
+
+        $participants = Participant::with(['friends', 'user'])->whereHas('user', function ($query) use ($project_id,$forms, $select_paypal_status_ok, $paypal_status, $eligible_seed, $eligible_peers, $survey_complete) {
             foreach ($forms as $key => $f) {
                 $query->where($f['name'], $f['operator'], $f['value']);
             }
@@ -78,10 +80,21 @@ class ParticipantController extends BaseController
             }
             if ($paypal_status) {
                 $query->where("paypal_id_status", "=", $paypal_status);
-
             }
-
         })->get();
+
+        // foreach ($participants as &$p) {
+
+        //     $pp = ProjectParticipant::where("projects_projectid", $request['project_id'])->where("participants_userid", $p->userid)->first();
+        //     if ($pp) {
+        //         $p->projectParticipantInvited = $pp->invited;
+
+        //         $p->projectParticipantPaymentConfirmed = $pp->payment_confirmed;
+        //         var_dump($p);
+        //         exit;
+        //     }
+        // }
+
 
         // var_dump($participants->toArray());
         // exit;

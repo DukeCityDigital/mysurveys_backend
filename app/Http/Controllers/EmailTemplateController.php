@@ -26,7 +26,7 @@ class EmailTemplateController extends BaseController
         $project_id =  $request->get('project_id');
         $templates = EmailTemplate::all();
         foreach ($templates as $template) {
-            $template->transformed = $this->transformEmailTemplateBody($template, $project_id);
+            $template->transformed = $this->transformEmailTemplateBodySubject($template, $project_id);
         }
         return $this->sendResponse($templates->toArray(), 'Email Templates Retrieved successfully.');
     }
@@ -42,7 +42,7 @@ class EmailTemplateController extends BaseController
         //
         $templates = EmailTemplate::all();
         foreach ($templates as $template) {
-            $template->transformed = $this->transformEmailTemplateBody($template);
+            $template->transformed = $this->transformEmailTemplateBodySubject($template);
         }
         return $this->sendResponse($templates->toArray(), 'Email Templates Retrieved successfully.');
     }
@@ -52,66 +52,68 @@ class EmailTemplateController extends BaseController
     /**
      * Change the wildcards to their new values
      */
-    public function transformEmailTemplateBody($template, $project_id = 1, $user = null)
+    public function transformEmailTemplateBodySubject($template, $project_id = 1, $user = null)
     {
 
         $body = $template['body'];
         $subject = $template['subject'];
-        $project_data = Project::find($project_id);
-        if (!$project_data) {
-            return False;
-        }
 
-        $pCtrl = new MyProjectsController();
+        $project_data = Project::find($project_id);
+
+        $replacements = array();
+        if ($project_data) {
+            $replacements[] = array('*projecttitle*', stripslashes($project_data->project_title));
+            // $replacements[] = array('*link*', $userlink);
+            $replacements[] = array('*responsibleperson*', stripslashes($project_data->responsible_person));
+            $replacements[] = array('*projectinfo*', stripslashes($project_data->project_description));
+            $replacements[] = array('*projectenddate*', $project_data->defaultend);
+            $replacements[] = array('*maxpayout*', $project_data->max_payout);
+            $replacements[] = array('*expectedpayout*',  $project_data->expected_payout);
+        }
+        $replacements[] = array('*contactaddress*', 'mysurveysteam@gmail.com');
 
         $seed_nick = "";
         $user_nick = "";
         $userlink = "";
-
-
+ 
         if ($user) {
             $pp = ProjectParticipant::where("participants_userid", $user->id)->first();
             $p = Participant::where("user_id", $user->id)->first();
-            $user_nick = $user->nickname;
+            $user_nick = $p->nickname;
+            
             if ($p && $p->seed_id) {
                 $seed = Participant::where("user_id", $p->seed_id)->first();
                 $seed_nick = $seed->nickname;
             }
 
-            $proj = Project::find($project_id);
-            if (!$pp) {
-                $pp = ProjectParticipant::where("projects_projectid", $project_id)->first();
+            $replacements[] = array('*seednickname*', $seed_nick);
+
+            if ($user && $project_data) {
+                $pCtrl = new MyProjectsController();
+                $proj = Project::find($project_id);
+                if (!$pp) {
+                    $pp = ProjectParticipant::where("projects_projectid", $project_id)->first();
+                }
+                $userlink = $pCtrl->makeProjectLink($pp, $proj);
             }
-
-            $userlink = $pCtrl->makeProjectLink($pp, $proj);
-        }
-        //  else {
-        //     $userlink = $project_data->link;
-        // }
-
-        // var_dump($userlink);
-
-        $replacements = array();
-        $replacements[] = array('*projecttitle*', stripslashes($project_data->project_title));
-        // $replacements[] = array('*link*', $userlink);
-        $replacements[] = array('*responsibleperson*', stripslashes($project_data->responsible_person));
-        $replacements[] = array('*projectinfo*', stripslashes($project_data->project_description));
-        $replacements[] = array('*projectenddate*', $project_data->defaultend);
-        $replacements[] = array('*maxpayout*', $project_data->max_payout);
-        $replacements[] = array('*expectedpayout*',  $project_data->expected_payout);
-        if ($user) {
             $replacements[] = array('*username*', $user->email);
             $replacements[] = array('*nickname*', $user_nick);
-            $replacements[] = array('*seednickname*', $seed_nick);
         } else {
             $replacements[] = array('*username*', '<no user selected>');
             $replacements[] = array('*nickname*', '<no user selected>');
         }
-        $replacements[] = array('*contactaddress*', 'mysurveysteam@gmail.com');
+        if (isset($template['password'])) {
+            $replacements[] = array('*password*', $template['password']);
+        }
+
+        // REPLACE
         foreach ($replacements as $rep) {
             $subject = str_replace($rep[0], $rep[1], $subject);
             $body = str_replace($rep[0], $rep[1], $body);
         }
+        // REPLACE
+
+
         // var_dump($body);
         return array(
             "body" => $body,

@@ -14,9 +14,6 @@ use Illuminate\Support\Facades\Hash;
 
 class ProjectParticipantController extends BaseController
 {
-
-
-
     /**
      * Display a listing of the Project Participants.
      *
@@ -115,14 +112,14 @@ class ProjectParticipantController extends BaseController
                 $seed = Participant::where("user_id", $ppayee->participant->seed_id)->first();
 
                 $friends = Participant::where("seed_id", $ppayee->participants_userid)->get();
-              
+
                 if ($seed) {
                     $seed_nickname = $seed->nickname;
                 } else {
                     $seed_nickname = null;
                 }
                 $fields = array(
-                    'created' => $ppayee->user->created_at,                    
+                    'created' => $ppayee->user->created_at,
                     'email' => $ppayee->user->email,
                     'project_id' => $ppayee->projects_projectid,
                     'invited' => $ppayee->invited,
@@ -172,7 +169,7 @@ class ProjectParticipantController extends BaseController
 
                     $count++;
                 }
-            
+
                 $data[] = $fields;
                 $ppayee['paypal_id'] = $ppayee->user->email;
                 $p = [];
@@ -188,6 +185,32 @@ class ProjectParticipantController extends BaseController
         }
 
         return new ProjectParticipants(ProjectParticipant::where("projects_projectid", $request['project_id'])->paginate(0));
+    }
+
+    /**
+     * Remove participant from selection
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function remove_from_selection(Request $request)
+    {
+
+        $validator = Validator::make($request->all(), [
+            'project_id' => 'required',
+            'users' => 'required',
+
+        ]);
+
+        $exists = ProjectParticipant::where("projects_projectid", $request['project_id'])
+            ->where("participants_userid", $request['users'])->first();
+
+        if ($exists) {
+            $exists->delete();
+            // $p->fill($data);
+            // $p->save();
+            // $new++;
+        }
+        return $this->sendResponse('Removed Participant ', 200);
     }
 
     /**
@@ -244,7 +267,7 @@ class ProjectParticipantController extends BaseController
         $user_actual = User::find($user);
         $string = $user_actual->email . $project_id;
         $hashed = md5($string);
-        return substr($hashed, -12);       
+        return substr($hashed, -12);
     }
 
     private function validateFilter($request)

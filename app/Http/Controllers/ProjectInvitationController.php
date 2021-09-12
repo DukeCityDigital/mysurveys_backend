@@ -120,14 +120,11 @@ class ProjectInvitationController extends BaseController
         $pp_actual = ProjectParticipant::whereIn("participants_userid", $ids)
             ->where("projects_projectid", $project_id)
             ->get();
-
         $d = new \DateTime();
         $now = $d->format("Y-m-d H:i:s");
-
         $project_actual = Project::find($project_id);
         $this->logger('info', "Initiating invitations group", ["ids" => $ids, "project_id" => $project_id]);
         $count = 0;
-
         /**
          * Initiate sending sequence
          */
@@ -142,25 +139,16 @@ class ProjectInvitationController extends BaseController
                 $data['participant'] = $invitee_participant;
                 $invitee_participant->invited = $now;
                 $invitee_participant->save();
-
                 $user_actual = User::find($invitee_participant->participants_userid);
-
-
                 // OP HERE 
                 $data['project'] = $project_actual;
-
-
                 $template = EmailTemplate::find(1);
                 $data['body'] = $template['body'];
                 $data['subject'] = $template['subject'];
-
-
                 $user_actual->sendEmailTemplateMessage($data);
-
                 // $user_actual->sendInvitationNotification($data);
                 $count = $count + 1;
                 $this->logger('info', "Invitation sent to participant " . $user_actual->email, ["user" => $user_actual, "project_id" => $project_id]);
-
                 $slData = [
                     "projects_projectid" => $project_id,
                     "replyto" => 'support',

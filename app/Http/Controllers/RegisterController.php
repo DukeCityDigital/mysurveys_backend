@@ -14,12 +14,12 @@ use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Str;
 use App\PasswordReset;
 use App\EmailChanges;
+use App\EmailTemplate;
 use Illuminate\Support\Facades\Auth;
 use App\Notifications\PasswordResetSuccess;
 use App\Participant;
 use App\Helpers\Utilities;
 use Request as BRequest;
-
 class RegisterController extends BaseController
 {
 
@@ -92,6 +92,10 @@ class RegisterController extends BaseController
         $user->sendApiEmailVerificationNotification($data);
     }
 
+    public function remind_friend(Request $request) {
+        return $this->invite_reminder($request);
+    }
+
     /**
      * Invite participant / friend
      * @param Request with key 'invite' treated as friend invite
@@ -99,10 +103,6 @@ class RegisterController extends BaseController
      */
     public function invite_participant(Request $request)
     {
-
-        if (!empty($request->all()['remind'])) {
-            return $this->invite_reminder($request);
-        }
 
         $validator = Validator::make($request->all(), [
             'email' => 'required|email|unique:users',
@@ -122,8 +122,19 @@ class RegisterController extends BaseController
             $seed_id = Auth::user()->id;
             $p = $this->create_participant($newuser->id, $seed_id, $nickname);
             if (isset($request['invite'])) {
-                $data['invite'] = true;
-                $newuser->friendSendApiEmailVerificationNotification($data);
+                $data['invite'] = true;                
+                $template = EmailTemplate::find(8);
+                $data['body'] = $template->body;
+                $data['subject'] = $template->subject;
+                $data['password'] = $data['password'];
+
+                // echo 'use template' .$template->id;
+                // var_dump($data['body']);
+
+
+                 $newuser->sendEmailTemplateMessage($data);
+
+                // $newuser->friendSendApiEmailVerificationNotification($data);
 
                 return response()->json(['user' => $newuser], 201);
             }
