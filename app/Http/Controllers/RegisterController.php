@@ -123,7 +123,7 @@ class RegisterController extends BaseController
             $p = $this->create_participant($newuser->id, $seed_id, $nickname);
             if (isset($request['invite'])) {
                 $data['invite'] = true;                
-                $template = EmailTemplate::find(8);
+                $template = EmailTemplate::where('subject', "MySurveys Friend Invitation")->first();
                 $data['body'] = $template->body;
                 $data['subject'] = $template->subject;
                 $data['password'] = $data['password'];

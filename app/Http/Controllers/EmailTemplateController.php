@@ -200,5 +200,8 @@ class EmailTemplateController extends BaseController
     public function destroy(EmailTemplate $emailTemplate)
     {
         //
+     
+        $template = $emailTemplate;
+        $template->delete();
     }
 }
