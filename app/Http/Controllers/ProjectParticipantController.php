@@ -137,15 +137,19 @@ class ProjectParticipantController extends BaseController
                 // echo 'seedid';
                 // echo $ppayee->participant->seed_id;
 
-                $seed = Participant::where("user_id", $ppayee->participant->seed_id)->first();
+                $seed = Participant::with(['user'])->where("user_id", $ppayee->participant->seed_id)->first();
 
-                $friends = Participant::where("seed_id", $ppayee->participants_userid)->get();
+                $friends = Participant::with(['user'])->where("seed_id", $ppayee->participants_userid)->get();
 
                 if ($seed) {
                     $seed_nickname = $seed->nickname;
+                    $seed_email = $seed->email;
                 } else {
                     $seed_nickname = null;
+                    $seed_email = '';
+
                 }
+
                 $fields = array(
                     'created' => $ppayee->user->created_at,
                     'email' => $ppayee->user->email,
@@ -174,6 +178,8 @@ class ProjectParticipantController extends BaseController
                     'subrole' => $ppayee->user->subrole,
                     'participants_userid' => $ppayee->participants_userid,
                     'seed_id' => $ppayee->participant->seed_id,
+                    'seed_email' => $seed_email,
+
                     'nickname' => $ppayee->participant->nickname,
                     'seed_nickname' => $seed_nickname,
                     'source' => $ppayee->participant->source,
@@ -192,6 +198,10 @@ class ProjectParticipantController extends BaseController
                     $fields[$key] = $f->nickname;
                     $keypp = $key . " " . " PayPalIdStatus";
                     $fields[$keypp] = $f->paypal_id_status;
+
+                    $kemail = $key . " " . " Email";
+                    $fields[$kemail] = $f->user->email;
+
                     if ($f->paypal_id_status =='Ok') {
                         $pp_verified_friends ++;
                     }
