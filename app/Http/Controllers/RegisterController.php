@@ -50,11 +50,10 @@ class RegisterController extends BaseController
             return response()->json($validator->messages()->toArray(), 409);
         }
         $user_info = $validator->valid();
-        // $ip = BRequest::ip();
-        // var_dump($ip);
+        $ip = $request->ip();
         // exit;
         if ($newuser = $this->create_user($user_info, 'participant')) {
-            $this->create_participant($newuser->id);
+            $this->create_participant($newuser->id, null,null,$ip);
             if (isset($user_info['qualificationForm'])) {
                 Participant::makeSeed($newuser->id, $user_info['qualificationForm']);
             }
@@ -317,10 +316,12 @@ class RegisterController extends BaseController
      * @param type $seed_id
      * @return boolean
      */
-    public function create_participant($id, $seed_id = null, $nickname = null)
+    public function create_participant($id, $seed_id = null, $nickname = null, $ip=null)
     {
+
         $aData = [
             "user_id" => $id,
+            "ip" => $ip,
             "seed_id" => $seed_id,
         ];
         $new = Participant::checkIfNew($id);

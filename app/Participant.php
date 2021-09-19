@@ -16,6 +16,7 @@ class Participant extends Model
      */
     protected $fillable = [
         'user_id',
+        'ip',
         'share_data',
         'share',
         'qualified',
