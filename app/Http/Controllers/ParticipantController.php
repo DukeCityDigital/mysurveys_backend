@@ -55,7 +55,7 @@ class ParticipantController extends BaseController
         $project_id = $request['project_id'];
 
 
-        $participants = Participant::with(['friends', 'user'])->whereHas('user', function ($query) use ($project_id,$forms, $select_paypal_status_ok, $paypal_status, $eligible_seed, $eligible_peers, $survey_complete) {
+        $participants = Participant::with(['friends', 'user'])->whereHas('user', function ($query) use ($project_id, $forms, $select_paypal_status_ok, $paypal_status, $eligible_seed, $eligible_peers, $survey_complete) {
             foreach ($forms as $key => $f) {
                 $query->where($f['name'], $f['operator'], $f['value']);
             }
@@ -83,17 +83,22 @@ class ParticipantController extends BaseController
             }
         })->get();
 
-        // foreach ($participants as &$p) {
+        foreach ($participants as &$p) {
+            // echo 'projeciot' . $request['project_id'];
+            // echo 'USERID' . $p->user_id;
+            // echo $p->userid;
+            $pp = ProjectParticipant::where("projects_projectid", $request['project_id'])->where("participants_userid", $p->user_id)->first();
 
-        //     $pp = ProjectParticipant::where("projects_projectid", $request['project_id'])->where("participants_userid", $p->userid)->first();
-        //     if ($pp) {
-        //         $p->projectParticipantInvited = $pp->invited;
-
-        //         $p->projectParticipantPaymentConfirmed = $pp->payment_confirmed;
-        //         var_dump($p);
-        //         exit;
-        //     }
-        // }
+            if ($pp) {
+                // var_dump($pp);
+                $p->projectParticipantInvited = $pp->invited;
+                $p->projectParticipantPaymentConfirmed = $pp->payment_confirmed;
+                // exit;
+            } else {
+                // $p->projectParticipantInvited =null;
+                // $p->projectParticipantPaymentConfirmed = null;
+            }
+        }
 
 
         // var_dump($participants->toArray());
@@ -247,6 +252,8 @@ class ParticipantController extends BaseController
         $friends_ids = Participant::where("seed_id", $id)->pluck('user_id');
 
         $participants_ids = ProjectParticipant::where("participants_userid", $id)->pluck('participants_userid');
+
+
         if (count($friends_ids)) {
             return $this->sendResponse($friends_ids, "This user has active friends, please delete those first " . "[$friends_ids]", 304);
         }
