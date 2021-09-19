@@ -177,6 +177,9 @@ class ProjectParticipantController extends BaseController
                     'nickname' => $ppayee->participant->nickname,
                     'seed_nickname' => $seed_nickname,
                     'source' => $ppayee->participant->source,
+                    'valid' => $ppayee->participant->valid,
+                    'group' => $ppayee->participant->group,
+
                     // 'friend1' => $friend1,
                     // 'friend2' =>$friend2,
                     // 'friend3' =>$friend3,
