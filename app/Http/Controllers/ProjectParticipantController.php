@@ -179,6 +179,8 @@ class ProjectParticipantController extends BaseController
                     'participants_userid' => $ppayee->participants_userid,
                     'seed_id' => $ppayee->participant->seed_id,
                     'seed_email' => $seed_email,
+                    'ip' =>$ppayee->participant->ip,
+
 
                     'nickname' => $ppayee->participant->nickname,
                     'seed_nickname' => $seed_nickname,
