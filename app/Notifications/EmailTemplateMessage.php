@@ -13,6 +13,8 @@ use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Lang;
 
+use Illuminate\Support\HtmlString;
+
 class EmailTemplateMessage extends Notification
 {
 
@@ -60,9 +62,8 @@ class EmailTemplateMessage extends Notification
     private function getMessage($notifiable, $extra = [])
     {
         $data = $this->data;
-
         $body_subject = $this->emailCtrl->transformEmailTemplateBodySubject($data, null, $notifiable);
-      
+
         $body = str_replace("*buttonlink*", "", $body_subject['body']);
         $mailMessage = new MailMessage();
         $mailMessage->subject(Lang::get($body_subject['subject']));
@@ -80,8 +81,8 @@ class EmailTemplateMessage extends Notification
         //     $mailMessage->action($userlink, $userlink);
         // }
 
-     
-        if (strpos($body_subject['body'], "*buttonlink*")&& isset($data['project'])) {
+
+        if (strpos($body_subject['body'], "*buttonlink*") && isset($data['project'])) {
             $pCtrl = new MyProjectsController();
 
             $proj = Project::find($data['project']->id);
@@ -90,6 +91,13 @@ class EmailTemplateMessage extends Notification
             $userlink = $pCtrl->makeProjectLink($pp, $proj);
             $mailMessage->action(Lang::get('Start Project'), $userlink);
         }
+
+        if (isset($data['password'])) {
+            $mailMessage->line(new HtmlString('Password: <strong>' . $data['password'] . '</strong>'));
+        }
+
+        // if has password 
+
 
 
 
