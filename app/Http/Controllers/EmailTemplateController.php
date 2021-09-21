@@ -102,9 +102,9 @@ class EmailTemplateController extends BaseController
             $replacements[] = array('*username*', '<no user selected>');
             $replacements[] = array('*nickname*', '<no user selected>');
         }
-        if (isset($template['password'])) {
-            $replacements[] = array('*password*', '<strong>' . $template['password'] . '</strong>');
-        }
+        // if (isset($template['password'])) {
+        //     $replacements[] = array('*password*', '<strong>' . $template['password'] . '</strong>');
+        // }
 
         // REPLACE
         foreach ($replacements as $rep) {

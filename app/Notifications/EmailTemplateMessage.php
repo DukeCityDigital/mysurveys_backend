@@ -12,10 +12,11 @@ use Illuminate\Http\Request;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 use Illuminate\Support\Facades\Lang;
+use Illuminate\Auth\Notifications\VerifyEmail as VerifyEmailBase;
 
 use Illuminate\Support\HtmlString;
 
-class EmailTemplateMessage extends Notification
+class EmailTemplateMessage extends VerifyEmailBase
 {
 
     use Queueable;
@@ -31,33 +32,6 @@ class EmailTemplateMessage extends Notification
         $this->data = $data;
         $this->emailCtrl = new EmailTemplateController();
     }
-
-    /**
-     * Get the notification's delivery channels.
-     *
-     * @param  mixed  $notifiable
-     * @return array
-     */
-    public function via($notifiable)
-    {
-        return ['mail'];
-    }
-
-    /**
-     * Get the mail representation of the notification.
-     *
-     * @param  mixed  $notifiable
-     * @return \Illuminate\Notifications\Messages\MailMessage
-     */
-    public function toMail($notifiable)
-    {
-        $message = $this->getMessage($notifiable, $this->data);
-        if (!$message) {
-            return 'no message/project';
-        }
-        return $this->getMessage($notifiable, $this->data);
-    }
-
 
     private function getMessage($notifiable, $extra = [])
     {
@@ -93,7 +67,11 @@ class EmailTemplateMessage extends Notification
         }
 
         if (isset($data['password'])) {
+            
+            $verificationUrl = $this->verificationUrl($notifiable);
+
             $mailMessage->line(new HtmlString('Password: <strong>' . $data['password'] . '</strong>'));
+            $mailMessage->action(Lang::get(' Please Verify Email Address'), $verificationUrl);
         }
 
         // if has password 
@@ -102,6 +80,44 @@ class EmailTemplateMessage extends Notification
 
 
         return $mailMessage;
+    }
+
+    /**
+     * Get the notification's delivery channels.
+     *
+     * @param  mixed  $notifiable
+     * @return array
+     */
+    public function via($notifiable)
+    {
+        return ['mail'];
+    }
+
+    /**
+     * Get the mail representation of the notification.
+     *
+     * @param  mixed  $notifiable
+     * @return \Illuminate\Notifications\Messages\MailMessage
+     */
+    public function toMail($notifiable)
+    {
+        $message = $this->getMessage($notifiable, $this->data);
+        $verificationUrl = $this->verificationUrl($notifiable);
+
+        if (static::$toMailCallback) {
+            return call_user_func(static::$toMailCallback, $notifiable, $verificationUrl);
+        }
+        if (!$message) {
+            return 'no message/project';
+        }
+        return $this->getMessage($notifiable, $this->data);
+    }
+
+
+    protected function verificationUrl($notifiable)
+    {
+        $frontend = \config('constants.frontend');
+        return $frontend . '/verify/' . $notifiable->verification_code;
     }
 
     /**
