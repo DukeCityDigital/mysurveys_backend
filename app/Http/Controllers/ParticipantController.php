@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\EmailTemplate;
 use App\Participant;
 use Illuminate\Http\Request;
 use App\Http\Controllers\BaseController;
@@ -163,6 +164,13 @@ class ParticipantController extends BaseController
         $user = Auth::user();
         $profile = $this->retrieve_profile($user->id);
         $profile['step'] = $this->getUserStep();
+        $template = EmailTemplate::where('subject', "MySurveys Friend Invitation")->first();
+        $emailCtrl = new EmailTemplateController();
+        if ($template) {
+            $body_subject = $emailCtrl->transformEmailTemplateBodySubject($template, null, $user);
+
+            $profile['template'] = $body_subject;
+        }
         return $this->sendResponse($profile, 'Profile retrieved');
     }
 
