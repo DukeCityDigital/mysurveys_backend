@@ -75,12 +75,15 @@ class EmailTemplateController extends BaseController
         $seed_nick = "";
         $user_nick = "";
         $userlink = "";
- 
+
         if ($user) {
             $pp = ProjectParticipant::where("participants_userid", $user->id)->first();
             $p = Participant::where("user_id", $user->id)->first();
-            $user_nick = $p->nickname;
-            
+
+            if ($p) {
+                $user_nick = $p->nickname;
+            }
+
             if ($p && $p->seed_id) {
                 $seed = Participant::where("user_id", $p->seed_id)->first();
                 $seed_nick = $seed->nickname;
@@ -200,7 +203,7 @@ class EmailTemplateController extends BaseController
     public function destroy(EmailTemplate $emailTemplate)
     {
         //
-     
+
         $template = $emailTemplate;
         $template->delete();
     }
