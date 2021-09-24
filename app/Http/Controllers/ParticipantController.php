@@ -168,7 +168,7 @@ class ParticipantController extends BaseController
         $emailCtrl = new EmailTemplateController();
         if ($template) {
             $body_subject = $emailCtrl->transformEmailTemplateBodySubject($template, null, $user);
-
+            $body = $body_subject['body'];
             $profile['template'] = $body_subject;
         }
         return $this->sendResponse($profile, 'Profile retrieved');
