@@ -44,17 +44,16 @@ class EmailTemplateMessage extends VerifyEmailBase
 
         $lines = explode("*nl*", $body);
 
+        if ($data['custom_message']/*custommessage*/) {
+            $mailMessage->line($data['custom_message']);
+        }
+
         foreach ($lines as $line) {
             $mailMessage->line($line);
         }
-
-
-
-
         // if (isset($this->data['link']) && $this->data['link'] !== '') {
         //     $mailMessage->action($userlink, $userlink);
         // }
-
 
         if (strpos($body_subject['body'], "*buttonlink*") && isset($data['project'])) {
             $pCtrl = new MyProjectsController();
@@ -67,7 +66,7 @@ class EmailTemplateMessage extends VerifyEmailBase
         }
 
         if (isset($data['password'])) {
-            
+
             $verificationUrl = $this->verificationUrl($notifiable);
 
             $mailMessage->line(new HtmlString('Password: <strong>' . $data['password'] . '</strong>'));
