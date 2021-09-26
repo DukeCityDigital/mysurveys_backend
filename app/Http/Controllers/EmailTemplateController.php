@@ -75,7 +75,7 @@ class EmailTemplateController extends BaseController
         $seed_nick = "";
         $user_nick = "";
         $userlink = "";
-
+        $seed_email= "";
         if ($user) {
             $pp = ProjectParticipant::where("participants_userid", $user->id)->first();
             $p = Participant::where("user_id", $user->id)->first();
@@ -87,9 +87,13 @@ class EmailTemplateController extends BaseController
             if ($p && $p->seed_id) {
                 $seed = Participant::where("user_id", $p->seed_id)->first();
                 $seed_nick = $seed->nickname;
+                $seed_email = $seed->email;
+
             }
 
             $replacements[] = array('*seednickname*', $seed_nick);
+            $replacements[] = array('*seedemail*', $seed_email);
+
 
             if ($user && $project_data) {
                 $pCtrl = new MyProjectsController();
