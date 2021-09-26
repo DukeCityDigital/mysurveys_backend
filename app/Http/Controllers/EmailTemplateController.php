@@ -105,6 +105,10 @@ class EmailTemplateController extends BaseController
             $replacements[] = array('*username*', '<no user selected>');
             $replacements[] = array('*nickname*', '<no user selected>');
         }
+        //remove password string
+        $replacements[] = array('*password*', '');
+        $replacements[] = array('PASSWORD:', '');
+
         // if (isset($template['password'])) {
         //     $replacements[] = array('*password*', '<strong>' . $template['password'] . '</strong>');
         // }
