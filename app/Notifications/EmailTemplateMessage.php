@@ -44,7 +44,7 @@ class EmailTemplateMessage extends VerifyEmailBase
 
         $lines = explode("*nl*", $body);
 
-        if ($data['custom_message']/*custommessage*/) {
+        if (isset($data['custom_message']/*custommessage*/)) {
             $mailMessage->line($data['custom_message']);
         }
 
