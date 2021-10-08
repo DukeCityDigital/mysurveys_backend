@@ -418,6 +418,8 @@ class RegisterController extends BaseController
     {
 
         $request_code = $request->only("code");
+        $ip = $request->ip();
+
         if (empty($request['code'])) {
             return $this->sendError('Validation Error.', ['invalid input']);
         }
@@ -441,6 +443,7 @@ class RegisterController extends BaseController
             return response()->json(['user' => $user], 200);
         }
         $user->email_verified_at = Carbon::now();
+        $user->participant->ip = $ip;
         // TODO - verif code remove on accept ? 
         //        $user->verification_code = '';
         $user->save();
