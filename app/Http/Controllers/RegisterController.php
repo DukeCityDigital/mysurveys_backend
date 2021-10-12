@@ -420,6 +420,8 @@ class RegisterController extends BaseController
         $request_code = $request->only("code");
         $ip = $request->ip();
 
+      
+
         if (empty($request['code'])) {
             return $this->sendError('Validation Error.', ['invalid input']);
         }
@@ -446,7 +448,7 @@ class RegisterController extends BaseController
         $user->participant->ip = $ip;
         // TODO - verif code remove on accept ? 
         //        $user->verification_code = '';
-        $user->save();
+        $user->save();     
         if ($user->hasRole('participant')) {
             if ($token = auth()->login($user)) {
                 $aCtrl = new AuthController();
