@@ -32,13 +32,6 @@ class Participant extends Model
         "qualification_vac_effective",
         "qualification_vac_harmful",
         "qualification_vac_pharma",
-
-
-
-
-
-
-
     ];
     protected $appends = array('projects', 'verified_friends_count', 'eligible_seed', 'email', 'survey_complete');
     protected $primaryKey = 'user_id';

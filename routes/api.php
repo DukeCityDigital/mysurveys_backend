@@ -76,7 +76,6 @@ Route::group(['middleware' => ['role:administrator|researcher']], function () {
     Route::post('get_selection', 'ProjectParticipantController@get_selection');
     Route::post('get_advanced_selection', 'ParticipantController@get_advanced_selection');
     Route::post('remove_from_selection', 'ProjectParticipantController@remove_from_selection');
-
     Route::resource('participants', 'ParticipantController');
     Route::resource('projects', 'ProjectController');
 });
