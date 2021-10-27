@@ -58,7 +58,7 @@ class VerifyApiEmail extends VerifyEmailBase
             ->line('Please click the button below to verify your email address.')
             ->action(Lang::get(' Please Verify Email Address'), $verificationUrl)
             ->line('')
-            ->line(new HtmlString('<bold>For additional project support, contact mysurveys@santafe.edu</bold>'));
+            ->line(new HtmlString('<bold>For additional project support, contact mysurveysteam@gmail.com</bold>'));
 
 
 
